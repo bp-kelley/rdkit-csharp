@@ -1,0 +1,73 @@
+<?xml version="1.0"?>
+<package >
+  <metadata>
+    <id>RDKit2DotNet</id>
+    <version>2017.09.1-alpha1</version>
+    <authors>fustigator@gmail.com</authors>
+    <owners>fustigator@gmail.com</owners>
+    <licenseUrl>https://github.com/rdkit/rdkit/blob/master/license.txt</licenseUrl>
+    <projectUrl>http://rdkit.org</projectUrl>
+    <iconUrl>https://avatars2.githubusercontent.com/u/2018047</iconUrl>
+
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>RDKit Cheminformatics Software Toolkit
+    
+    Note: Supports AnyCPU (x86 and x64).  To initialize ( in order to find the dlls ):
+    
+    using GraphMolWrap;
+    ...
+    RDKit.Initialize();
+    </description>
+    <releaseNotes>Development release testing out nuget.</releaseNotes>
+    <copyright>Copyright 2017</copyright>
+    <tags>Chemistry Toolkit Cheminformatics</tags>
+  </metadata>
+  <files>
+    <file src="build64\Code\JavaWrappers\csharp_wrapper\Release\RDKFuncs.dll"
+      target="build\x64" />
+    <file src="Nuget.Local\lib64\boost_atomic-vc140-mt-1_62.dll"
+      target="build\x64" />
+    <file src="Nuget.Local\lib64\boost_chrono-vc140-mt-1_62.dll"
+      target="build\x64" />
+    <file src="Nuget.Local\lib64\boost_date_time-vc140-mt-1_62.dll"
+      target="build\x64" />
+    <file src="Nuget.Local\lib64\boost_filesystem-vc140-mt-1_62.dll"
+      target="build\x64" />
+    <file src="Nuget.Local\lib64\boost_regex-vc140-mt-1_62.dll"
+      target="build\x64" />
+    <file src="Nuget.Local\lib64\boost_serialization-vc140-mt-1_62.dll"
+      target="build\x64" />
+    <file src="Nuget.Local\lib64\boost_system-vc140-mt-1_62.dll"
+      target="build\x64" />
+    <file src="Nuget.Local\lib64\boost_thread-vc140-mt-1_62.dll"
+      target="build\x64" />
+    <file src="Nuget.Local\lib64\boost_wserialization-vc140-mt-1_62.dll"
+      target="build\x64" />
+
+    <file src="build32\Code\JavaWrappers\csharp_wrapper\Release\RDKFuncs.dll"
+      target="build\x86" />
+    <file src="Nuget.Local\lib32\boost_atomic-vc140-mt-1_62.dll"
+      target="build\x86" />
+    <file src="Nuget.Local\lib32\boost_chrono-vc140-mt-1_62.dll"
+      target="build\x86" />
+    <file src="Nuget.Local\lib32\boost_date_time-vc140-mt-1_62.dll"
+      target="build\x86" />
+    <file src="Nuget.Local\lib32\boost_filesystem-vc140-mt-1_62.dll"
+      target="build\x86" />
+    <file src="Nuget.Local\lib32\boost_regex-vc140-mt-1_62.dll"
+      target="build\x86" />
+    <file src="Nuget.Local\lib32\boost_serialization-vc140-mt-1_62.dll"
+      target="build\x86" />
+    <file src="Nuget.Local\lib32\boost_system-vc140-mt-1_62.dll"
+      target="build\x86" />
+    <file src="Nuget.Local\lib32\boost_thread-vc140-mt-1_62.dll"
+      target="build\x86" />
+    <file src="Nuget.Local\lib32\boost_wserialization-vc140-mt-1_62.dll"
+      target="build\x86" />
+    
+    <file src="build32\Code\JavaWrappers\csharp_wrapper\bin\Release\RDKit2DotNet.dll"
+          target="lib\net40" />
+
+    <file src="RDKit2DotNet.props" target="build\net4" />    
+  </files>    
+</package>

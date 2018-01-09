@@ -5,6 +5,7 @@ set BOOST_INCLUDEDIR=%PACKAGE%/boost.1.62.0.0/lib/native/include
 set BOOST_LIBRARYDIR=%PACKAGE%/lib
 set EIGEN3_INCLUDE_DIR=%PACKAGE%/Eigen.3.3.3/build/native/include
 
+call get_nuget https://dist.nuget.org/win-x86-commandline/latest/nuget.exe
 
 REM **** ASSUMES rdkit is in the directory named rdkit in the same location as this directory ***
 

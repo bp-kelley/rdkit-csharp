@@ -5,9 +5,21 @@ Requirements:
 
   1. cmake 3.0+
   2. MSVC build environment 2014+ (32 and 64 bits)
-  3. nuget.exe
+  3. rdkit
+  
+Simply run build.bat and the C# version of the RDKit should be built
+into a nuget package.
 
-Simply run build.bat and the C# version of the RDKit should be built.
+Build Instructions
+==================
+
+```
+git clone https://github.com/bp-kelley/rdkit-csharp.git
+git clone https://github.com/rdkit/rdkit.git
+cd rdkit-csharp
+build.bat
+```
+
 
 Notes
 =====

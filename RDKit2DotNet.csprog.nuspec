@@ -2,7 +2,7 @@
 <package >
   <metadata>
     <id>RDKit2DotNet</id>
-    <version>2017.09.1-alpha1</version>
+    <version>2017.09.2-alpha1</version>
     <authors>fustigator@gmail.com</authors>
     <owners>fustigator@gmail.com</owners>
     <licenseUrl>https://github.com/rdkit/rdkit/blob/master/license.txt</licenseUrl>

@@ -20,7 +20,7 @@ mkdir %PACKAGE%\lib32
 cd %PACKAGE%
 
 %THISDIR%\nuget.exe install boost-vc140 -Version 1.62.00
-%THISDIR%\nuget.exe install Eigen -Version 3.3.31
+%THISDIR%\nuget.exe install Eigen -Version 3.3.3
 %THISDIR%\nuget.exe install cairo -Version 1.12.18
 
 @echo off

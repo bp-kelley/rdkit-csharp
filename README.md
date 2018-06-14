@@ -4,8 +4,9 @@ Build scripts for csharp release of the RDKit
 Requirements:
 
   1. cmake 3.0+
-  2. MSVC build environment 2014+ (32 and 64 bits)
-  3. rdkit
+  2. swig 3.0+
+  3. MSVC build environment 2014+ (32 and 64 bits)
+  4. rdkit repository ( at the same level as this repository)
   
 Simply run build.bat and the C# version of the RDKit should be built
 into a nuget package.

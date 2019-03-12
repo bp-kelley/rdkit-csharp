@@ -67,6 +67,9 @@ call :find-files-32 %PACKAGE% "*date_time*.lib"
 call :find-files-32 %PACKAGE% "*atomic*.dll"
 call :find-files-32 %PACKAGE% "*atomic*.lib"
 
+call :find-files-32 %PACKAGE% "*iostreams*.dll"
+call :find-files-32 %PACKAGE% "*iostreams*.lib"
+
 REM Find cairo libs
 call :find-files-64 %PACKAGE% "cairo.lib"
 call :find-files-32 %PACKAGE% "cairo.lib"
@@ -85,8 +88,10 @@ copy Code\JavaWrappers\csharp_wrapper\Release\RDKFuncs.dll Code\JavaWrappers\csh
 copy ..\..\rdkit\Code\JavaWrappers\csharp_wrapper\RDKit2DotNet.csproj Code\JavaWrappers\csharp_wrapper
 robocopy ..\..\rdkit\Code\JavaWrappers\csharp_wrapper\swig_csharp Code\JavaWrappers\csharp_wrapper\swig_csharp /E
 del Code\JavaWrappers\csharp_wrapper\swig_csharp\FilterCatalogParams.cs
+del Code\JavaWrappers\csharp_wrapper\swig_csharp\ColourPalette.cs
 copy %THISDIR%\FilterCatalogParams.cs.fixed  Code\JavaWrappers\csharp_wrapper\swig_csharp\FilterCatalogParams.cs
 copy %THISDIR%\RDKit.cs  Code\JavaWrappers\csharp_wrapper\swig_csharp\RDKit.cs
+copy %THISDIR%\ColourPalette.cs  Code\JavaWrappers\csharp_wrapper\swig_csharp\ColourPalette.cs
 msbuild "Code\JavaWrappers\csharp_wrapper\RDKit2DotNet.csproj" /m /p:Configuration=Release /maxcpucount:4 /t:Build /p:Platform=AnyCPU
 
 

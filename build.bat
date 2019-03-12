@@ -46,6 +46,9 @@ call :find-files-64 %PACKAGE% "*date_time*.lib"
 call :find-files-64 %PACKAGE% "*atomic*.dll"
 call :find-files-64 %PACKAGE% "*atomic*.lib"
 
+call :find-files-64 %PACKAGE% "*iostreams*.dll"
+call :find-files-64 %PACKAGE% "*iostreams*.lib"
+
 call :find-files-32 %PACKAGE% "*regex*.dll" 
 call :find-files-32 %PACKAGE% "*regex*.lib"
 
@@ -80,7 +83,7 @@ cd %THISDIR%
 mkdir build64
 cd build64
 
-cmake -G "Visual Studio 14 Win64" -DCMAKE_INSTALL_PREFIX=%P% -DRDK_BUILD_PYTHON_WRAPPERS=OFF -DRDK_BUILD_SWIG_WRAPPERS=ON -DRDK_BUILD_SWIG_JAVA_WRAPPER=OFF -DRDK_BUILD_SWIG_CSHARP_WRAPPER=ON -DBOOST_INCLUDEDIR="%BOOST_INCLUDEDIR%" -DBOOST_LIBRARYDIR="%BOOST_LIBRARYDIR%64" -DEIGEN3_INCLUDE_DIR="%EIGEN3_INCLUDE_DIR%" -DRDK_INSTALL_INTREE=OFF -DCPACK_INSTALL_PREFIX=rdkit -DRDK_BUILD_THREADSAFE_SSS=ON -DRDK_BUILD_AVALON_SUPPORT=ON -DRDK_BUILD_INCHI_SUPPORT=ON -DRDK_BUILD_CPP_TESTS=OFF -DRDK_BUILD_CAIRO_SUPPORT=ON -DCAIRO_INCLUDE_DIRS="%CAIRO_INCLUDE_DIRS%" -DCAIRO_LIBRARIES="%CAIRO_LIBRARIES%64" ..\..\rdkit
+cmake -G "Visual Studio 15 Win64" -DCMAKE_INSTALL_PREFIX=%P% -DRDK_BUILD_PYTHON_WRAPPERS=OFF -DRDK_BUILD_SWIG_WRAPPERS=ON -DRDK_BUILD_SWIG_JAVA_WRAPPER=OFF -DRDK_BUILD_SWIG_CSHARP_WRAPPER=ON -DBOOST_INCLUDEDIR="%BOOST_INCLUDEDIR%" -DBOOST_LIBRARYDIR="%BOOST_LIBRARYDIR%64" -DEIGEN3_INCLUDE_DIR="%EIGEN3_INCLUDE_DIR%" -DRDK_INSTALL_INTREE=OFF -DCPACK_INSTALL_PREFIX=rdkit -DRDK_BUILD_THREADSAFE_SSS=ON -DRDK_BUILD_AVALON_SUPPORT=ON -DRDK_BUILD_INCHI_SUPPORT=ON -DRDK_BUILD_CPP_TESTS=OFF -DRDK_BUILD_CAIRO_SUPPORT=ON -DCAIRO_INCLUDE_DIRS="%CAIRO_INCLUDE_DIRS%" -DCAIRO_LIBRARIES="%CAIRO_LIBRARIES%64" ..\..\rdkit
 
 msbuild "ALL_BUILD.vcxproj" /m /p:PlatformTarget=x64 /p:Configuration=Release /maxcpucount:4 /t:Build
 
@@ -88,12 +91,9 @@ copy Code\JavaWrappers\csharp_wrapper\Release\RDKFuncs.dll Code\JavaWrappers\csh
 copy ..\..\rdkit\Code\JavaWrappers\csharp_wrapper\RDKit2DotNet.csproj Code\JavaWrappers\csharp_wrapper
 robocopy ..\..\rdkit\Code\JavaWrappers\csharp_wrapper\swig_csharp Code\JavaWrappers\csharp_wrapper\swig_csharp /E
 del Code\JavaWrappers\csharp_wrapper\swig_csharp\FilterCatalogParams.cs
-del Code\JavaWrappers\csharp_wrapper\swig_csharp\ColourPalette.cs
 copy %THISDIR%\FilterCatalogParams.cs.fixed  Code\JavaWrappers\csharp_wrapper\swig_csharp\FilterCatalogParams.cs
 copy %THISDIR%\RDKit.cs  Code\JavaWrappers\csharp_wrapper\swig_csharp\RDKit.cs
-copy %THISDIR%\ColourPalette.cs  Code\JavaWrappers\csharp_wrapper\swig_csharp\ColourPalette.cs
 msbuild "Code\JavaWrappers\csharp_wrapper\RDKit2DotNet.csproj" /m /p:Configuration=Release /maxcpucount:4 /t:Build /p:Platform=AnyCPU
-
 
 REM build x86
 
@@ -101,7 +101,7 @@ cd %THISDIR%
 mkdir build32
 cd build32
 
-cmake -G "Visual Studio 14" -DCMAKE_INSTALL_PREFIX=%P% -DRDK_BUILD_PYTHON_WRAPPERS=OFF -DRDK_BUILD_SWIG_WRAPPERS=ON -DRDK_BUILD_SWIG_JAVA_WRAPPER=OFF -DRDK_BUILD_SWIG_CSHARP_WRAPPER=ON -DBOOST_INCLUDEDIR="%BOOST_INCLUDEDIR%" -DBOOST_LIBRARYDIR="%BOOST_LIBRARYDIR%32" -DEIGEN3_INCLUDE_DIR="%EIGEN3_INCLUDE_DIR%" -DRDK_INSTALL_INTREE=OFF -DCPACK_INSTALL_PREFIX=rdkit -DRDK_BUILD_THREADSAFE_SSS=ON -DRDK_BUILD_AVALON_SUPPORT=ON -DRDK_BUILD_INCHI_SUPPORT=ON -DRDK_BUILD_CPP_TESTS=OFF -DRDK_BUILD_CAIRO_SUPPORT=ON -DCAIRO_INCLUDE_DIRS="%CAIRO_INCLUDE_DIRS%" -DCAIRO_LIBRARIES="%CAIRO_LIBRARIES%32" ..\..\rdkit
+cmake -G "Visual Studio 15" -DCMAKE_INSTALL_PREFIX=%P% -DRDK_BUILD_PYTHON_WRAPPERS=OFF -DRDK_BUILD_SWIG_WRAPPERS=ON -DRDK_BUILD_SWIG_JAVA_WRAPPER=OFF -DRDK_BUILD_SWIG_CSHARP_WRAPPER=ON -DBOOST_INCLUDEDIR="%BOOST_INCLUDEDIR%" -DBOOST_LIBRARYDIR="%BOOST_LIBRARYDIR%32" -DEIGEN3_INCLUDE_DIR="%EIGEN3_INCLUDE_DIR%" -DRDK_INSTALL_INTREE=OFF -DCPACK_INSTALL_PREFIX=rdkit -DRDK_BUILD_THREADSAFE_SSS=ON -DRDK_BUILD_AVALON_SUPPORT=ON -DRDK_BUILD_INCHI_SUPPORT=ON -DRDK_BUILD_CPP_TESTS=OFF -DRDK_BUILD_CAIRO_SUPPORT=ON -DCAIRO_INCLUDE_DIRS="%CAIRO_INCLUDE_DIRS%" -DCAIRO_LIBRARIES="%CAIRO_LIBRARIES%32" ..\..\rdkit
 
 msbuild "ALL_BUILD.vcxproj" /m /p:PlatformTarget=x86 /p:Configuration=Release /maxcpucount:4 /t:Build
 
@@ -123,17 +123,19 @@ goto :eof
 
 REM Copies files to the lib64 directory
 :find-files-64
+    echo "Copying %~2"
     for /r "%~1" %%P in ("%~2") do (
         echo %%~fP|find "address-model-64" >nul
-        if errorlevel 1 (echo notfound) else (copy  "%%~fP" "%~1"\lib64)          
+        if errorlevel 1 (call) else (copy  "%%~fP" "%~1"\lib64)          
     )
 goto :eof
 
 REM Copies files to the lib32 directory
 :find-files-32
+    echo "Copying %~2"
     for /r "%~1" %%P in ("%~2") do (
         echo %%~fP|find "address-model-32" >nul
-        if errorlevel 1 (echo notfound) else (copy  "%%~fP" "%~1"\lib32)
+        if errorlevel 1 (call) else (copy  "%%~fP" "%~1"\lib32)
     )
 goto :eof
 

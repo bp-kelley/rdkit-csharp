@@ -6,7 +6,8 @@ set BOOST_LIBRARYDIR=%PACKAGE%/lib
 set EIGEN3_INCLUDE_DIR=%PACKAGE%/Eigen.3.3.3/build/native/include
 set CAIRO_INCLUDE_DIRS=%PACKAGE%/cairo.1.12.18.0/build/native/include
 set CAIRO_LIBRARIES=%PACKAGE%/lib
-
+set CAIRO_LIBRARIES_64=%PACKAGE%\cairo.1.12.18.0\build\native\lib\x64\v120\Release\dynamic\cairo.lib
+set CAIRO_LIBRARIES_32=%PACKAGE%\cairo.1.12.18.0\build\native\lib\Win32\v120\Release\dynamic\cairo.lib
 call get_nuget https://dist.nuget.org/win-x86-commandline/latest/nuget.exe
 
 REM **** ASSUMES rdkit is in the directory named rdkit in the same location as this directory ***
@@ -73,25 +74,19 @@ call :find-files-32 %PACKAGE% "*atomic*.lib"
 call :find-files-32 %PACKAGE% "*iostreams*.dll"
 call :find-files-32 %PACKAGE% "*iostreams*.lib"
 
-REM Find cairo libs
-call :find-files-64 %PACKAGE% "cairo.lib"
-call :find-files-32 %PACKAGE% "cairo.lib"
-
-@echo on
+@echo onc
 
 cd %THISDIR%
 mkdir build64
 cd build64
 
-cmake -G "Visual Studio 15 Win64" -DCMAKE_INSTALL_PREFIX=%P% -DRDK_BUILD_PYTHON_WRAPPERS=OFF -DRDK_BUILD_SWIG_WRAPPERS=ON -DRDK_BUILD_SWIG_JAVA_WRAPPER=OFF -DRDK_BUILD_SWIG_CSHARP_WRAPPER=ON -DBOOST_INCLUDEDIR="%BOOST_INCLUDEDIR%" -DBOOST_LIBRARYDIR="%BOOST_LIBRARYDIR%64" -DEIGEN3_INCLUDE_DIR="%EIGEN3_INCLUDE_DIR%" -DRDK_INSTALL_INTREE=OFF -DCPACK_INSTALL_PREFIX=rdkit -DRDK_BUILD_THREADSAFE_SSS=ON -DRDK_BUILD_AVALON_SUPPORT=ON -DRDK_BUILD_INCHI_SUPPORT=ON -DRDK_BUILD_CPP_TESTS=OFF -DRDK_BUILD_CAIRO_SUPPORT=ON -DCAIRO_INCLUDE_DIRS="%CAIRO_INCLUDE_DIRS%" -DCAIRO_LIBRARIES="%CAIRO_LIBRARIES%64" ..\..\rdkit
+cmake -G "Visual Studio 15 Win64" -DCMAKE_INSTALL_PREFIX=%P% -DRDK_BUILD_PYTHON_WRAPPERS=OFF -DRDK_BUILD_SWIG_WRAPPERS=ON -DRDK_BUILD_SWIG_JAVA_WRAPPER=OFF -DRDK_BUILD_SWIG_CSHARP_WRAPPER=ON -DBOOST_INCLUDEDIR="%BOOST_INCLUDEDIR%" -DBOOST_LIBRARYDIR="%BOOST_LIBRARYDIR%64" -DEIGEN3_INCLUDE_DIR="%EIGEN3_INCLUDE_DIR%" -DRDK_INSTALL_INTREE=OFF -DCPACK_INSTALL_PREFIX=rdkit -DRDK_BUILD_THREADSAFE_SSS=ON -DRDK_BUILD_AVALON_SUPPORT=ON -DRDK_BUILD_INCHI_SUPPORT=ON -DRDK_BUILD_CPP_TESTS=ON -DRDK_BUILD_CAIRO_SUPPORT=ON -DCAIRO_INCLUDE_DIRS="%CAIRO_INCLUDE_DIRS%" -DCAIRO_LIBRARIES="%CAIRO_LIBRARIES_64%" ..\..\rdkit
 
 msbuild "ALL_BUILD.vcxproj" /m /p:PlatformTarget=x64 /p:Configuration=Release /maxcpucount:4 /t:Build
 
 copy Code\JavaWrappers\csharp_wrapper\Release\RDKFuncs.dll Code\JavaWrappers\csharp_wrapper
 copy ..\..\rdkit\Code\JavaWrappers\csharp_wrapper\RDKit2DotNet.csproj Code\JavaWrappers\csharp_wrapper
 robocopy ..\..\rdkit\Code\JavaWrappers\csharp_wrapper\swig_csharp Code\JavaWrappers\csharp_wrapper\swig_csharp /E
-del Code\JavaWrappers\csharp_wrapper\swig_csharp\FilterCatalogParams.cs
-copy %THISDIR%\FilterCatalogParams.cs.fixed  Code\JavaWrappers\csharp_wrapper\swig_csharp\FilterCatalogParams.cs
 copy %THISDIR%\RDKit.cs  Code\JavaWrappers\csharp_wrapper\swig_csharp\RDKit.cs
 msbuild "Code\JavaWrappers\csharp_wrapper\RDKit2DotNet.csproj" /m /p:Configuration=Release /maxcpucount:4 /t:Build /p:Platform=AnyCPU
 
@@ -101,15 +96,13 @@ cd %THISDIR%
 mkdir build32
 cd build32
 
-cmake -G "Visual Studio 15" -DCMAKE_INSTALL_PREFIX=%P% -DRDK_BUILD_PYTHON_WRAPPERS=OFF -DRDK_BUILD_SWIG_WRAPPERS=ON -DRDK_BUILD_SWIG_JAVA_WRAPPER=OFF -DRDK_BUILD_SWIG_CSHARP_WRAPPER=ON -DBOOST_INCLUDEDIR="%BOOST_INCLUDEDIR%" -DBOOST_LIBRARYDIR="%BOOST_LIBRARYDIR%32" -DEIGEN3_INCLUDE_DIR="%EIGEN3_INCLUDE_DIR%" -DRDK_INSTALL_INTREE=OFF -DCPACK_INSTALL_PREFIX=rdkit -DRDK_BUILD_THREADSAFE_SSS=ON -DRDK_BUILD_AVALON_SUPPORT=ON -DRDK_BUILD_INCHI_SUPPORT=ON -DRDK_BUILD_CPP_TESTS=OFF -DRDK_BUILD_CAIRO_SUPPORT=ON -DCAIRO_INCLUDE_DIRS="%CAIRO_INCLUDE_DIRS%" -DCAIRO_LIBRARIES="%CAIRO_LIBRARIES%32" ..\..\rdkit
+cmake -G "Visual Studio 15" -DCMAKE_INSTALL_PREFIX=%P% -DRDK_BUILD_PYTHON_WRAPPERS=OFF -DRDK_BUILD_SWIG_WRAPPERS=ON -DRDK_BUILD_SWIG_JAVA_WRAPPER=OFF -DRDK_BUILD_SWIG_CSHARP_WRAPPER=ON -DBOOST_INCLUDEDIR="%BOOST_INCLUDEDIR%" -DBOOST_LIBRARYDIR="%BOOST_LIBRARYDIR%32" -DEIGEN3_INCLUDE_DIR="%EIGEN3_INCLUDE_DIR%" -DRDK_INSTALL_INTREE=OFF -DCPACK_INSTALL_PREFIX=rdkit -DRDK_BUILD_THREADSAFE_SSS=ON -DRDK_BUILD_AVALON_SUPPORT=ON -DRDK_BUILD_INCHI_SUPPORT=ON -DRDK_BUILD_CPP_TESTS=ON -DRDK_BUILD_CAIRO_SUPPORT=ON -DCAIRO_INCLUDE_DIRS="%CAIRO_INCLUDE_DIRS%" -DCAIRO_LIBRARIES="%CAIRO_LIBRARIES_32%" ..\..\rdkit
 
 msbuild "ALL_BUILD.vcxproj" /m /p:PlatformTarget=x86 /p:Configuration=Release /maxcpucount:4 /t:Build
 
 copy Code\JavaWrappers\csharp_wrapper\Release\RDKFuncs.dll Code\JavaWrappers\csharp_wrapper
 copy ..\..\rdkit\Code\JavaWrappers\csharp_wrapper\RDKit2DotNet.csproj Code\JavaWrappers\csharp_wrapper
 robocopy ..\..\rdkit\Code\JavaWrappers\csharp_wrapper\swig_csharp Code\JavaWrappers\csharp_wrapper\swig_csharp /E
-del Code\JavaWrappers\csharp_wrapper\swig_csharp\FilterCatalogParams.cs
-copy %THISDIR%\FilterCatalogParams.cs.fixed  Code\JavaWrappers\csharp_wrapper\swig_csharp\FilterCatalogParams.cs
 copy %THISDIR%\RDKit.cs  Code\JavaWrappers\csharp_wrapper\swig_csharp\RDKit.cs
 msbuild "Code\JavaWrappers\csharp_wrapper\RDKit2DotNet.csproj" /m /p:Configuration=Release /maxcpucount:4 /t:Build /p:Platform=AnyCPU
 
